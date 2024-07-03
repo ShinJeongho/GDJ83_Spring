@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<!-- 클래스명 변수명 = new 연산자 -->
+		<bean class="com.win.app.robot.LeftArm" id="leftArm"></bean>
+		
+		<bean class="com.win.app.robot.RightArm" id="rightArm"></bean>
+		
+		<bean class="com.win.app.robot.Wheel" id="wheel">
+		<!-- 
+		<constructor-arg index="0" value="50"></constructor-arg>
+		<constructor-arg index="1" value="lg"></constructor-arg>
+		<constructor-arg index="2" value="2"></constructor-arg>
+		-->
+		<!-- 
+		<constructor-arg type="int" value=""></constructor-arg>
+		-->
+		
+		<constructor-arg name="size" value="70"></constructor-arg>
+		<constructor-arg name="count" value="3"></constructor-arg>
+		<constructor-arg name="brand" value="LG"></constructor-arg>
+		
+		
+		</bean>
+		
+		<bean class="com.win.app.robot.Robot" id="robot">
+			<property name="leftArm" ref="leftArm"></property>
+			<property name="rightArm" ref="rightArm"></property>
+		
+		
+		</bean>
+</beans>

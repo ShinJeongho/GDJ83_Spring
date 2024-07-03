@@ -29,8 +29,12 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 
-		robot.getLa().info();
-		robot.getRa().info();
+		// robot.getLa().info();
+		// robot.getRa().info();
+
+		robot.getLeftArm().info();
+		robot.getRightArm().info();
+
 		return "index";
 
 	}
