@@ -1,14 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     const btn = document.getElementById("btn");
     const frm = document.getElementById("frm");
-    const addPhotoBtn = document.getElementById("add");
-    const photoInput = document.getElementById("photo");
 
     btn.addEventListener("click", function() {
-        let fields = ['userName', 'password', 'name', 'memberNumber', 'phone', 'email', 'address', 'photo'];
+        let fields = ['userName', 'password', 'confirmPassword', 'name', 'memberNumber', 'phone', 'email'];
         let isValid = true;
 
-        // 모든 오류 메시지 초기화
         fields.forEach(field => {
             const errorElement = document.getElementById(field + 'Error');
             if (errorElement) {
@@ -16,11 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        // 입력 필드를 순회하며 값이 비어있는지 확인
         for (let i = 0; i < fields.length; i++) {
             const fieldValue = document.getElementById(fields[i]).value;
             if (!fieldValue) {
-                // 값이 비어있으면 오류 메시지 표시
                 const errorElement = document.getElementById(fields[i] + 'Error');
                 if (errorElement) {
                     errorElement.textContent = '여기에 필수로 입력하세요';
@@ -29,18 +24,19 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
+        if (document.getElementById("password").value !== document.getElementById("confirmPassword").value) {
+            document.getElementById("confirmPasswordError").textContent = "비밀번호가 일치하지 않습니다.";
+            document.getElementById("confirmPassword").value = "";
+            isValid = false;
+        }
+
         if (isValid) {
-            // 모든 필드가 유효하면 폼 제출
             console.log("Form is valid, submitting form...");
             frm.submit();
         } else {
             console.log("Form is not valid");
-            alert("fail");
+            alert("입력된 값들을 확인해 주세요.");
         }
     });
-
-    addPhotoBtn.addEventListener("click", function() {
-        photoInput.click();
-    });
 });
-
+	

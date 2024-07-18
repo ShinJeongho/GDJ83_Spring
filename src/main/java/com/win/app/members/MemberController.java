@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -23,7 +24,14 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "join", method = RequestMethod.POST)
-	public String join(MemberDTO memberDTO) throws Exception {
+	public String join(@ModelAttribute MemberDTO memberDTO) throws Exception {
+		System.out.println("MemberDTO: " + memberDTO); // 디버그 로그 추가
+		System.out.println("Member Name: " + memberDTO.getMember_name()); // 추가 로그
+		System.out.println("Member Number: " + memberDTO.getMember_number());
+		System.out.println("Phone: " + memberDTO.getPhone());
+		System.out.println("Email: " + memberDTO.getEmail());
+		System.out.println("Member ID: " + memberDTO.getMember_id());
+		System.out.println("Member PWD: " + memberDTO.getMember_pwd());
 		int result = memberService.join(memberDTO);
 		return "redirect:/";
 	}
