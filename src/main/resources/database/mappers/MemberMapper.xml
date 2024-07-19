@@ -2,9 +2,10 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+
 <mapper namespace="com.win.app.members.MemberDAO">
 
+    <!-- 회원과 파일 정보를 함께 가져오는 쿼리 -->
     <select id="getMemberWithFiles" parameterType="map" resultType="com.win.app.members.MemberDTO">
         SELECT 
             m.M_ID,
@@ -24,14 +25,13 @@
             m.MEMBER_ID = #{member_id}
     </select>
     
-    
-    
-    
+    <!-- 파일 정보를 MEMBERFILES 테이블에 추가하는 쿼리 -->
     <insert id="insertMemberFile" parameterType="com.win.app.members.MemberFileDTO">
         INSERT INTO MEMBERFILES (FILENUM, M_ID, FILENAME, ORINAME)
         VALUES (FILES_SEQ.NEXTVAL, #{m_id, jdbcType=INTEGER}, #{fileName, jdbcType=VARCHAR}, #{oriName, jdbcType=VARCHAR})
     </insert>
 
+    <!-- 회원 가입 쿼리 -->
     <insert id="join" parameterType="com.win.app.members.MemberDTO">
         <selectKey keyProperty="m_id" resultType="int" order="BEFORE">
             SELECT MEMBERS_SEQ.NEXTVAL FROM DUAL
@@ -47,6 +47,7 @@
                 #{profile_image, jdbcType=VARCHAR})
     </insert>
 
+    <!-- 중복 체크 쿼리 -->
     <select id="isDuplicate" parameterType="com.win.app.members.MemberDTO" resultType="int">
         SELECT COUNT(*) 
         FROM MEMBERS 
@@ -55,7 +56,8 @@
            OR MEMBER_NUMBER = #{member_number, jdbcType=VARCHAR}
     </select>
   
-     <select id="login" parameterType="com.win.app.members.MemberDTO" resultType="com.win.app.members.MemberDTO">
+    <!-- 로그인 쿼리 -->
+    <select id="login" parameterType="com.win.app.members.MemberDTO" resultType="com.win.app.members.MemberDTO">
         SELECT
             m.M_ID,
             m.MEMBER_ID,
@@ -70,6 +72,7 @@
             m.MEMBER_ID = #{member_id}
     </select>
     
+    <!-- 회원과 계좌 정보를 함께 가져오는 쿼리 -->
     <select id="getMemberWithAccounts" parameterType="int" resultMap="memberWithAccountsResult">
         SELECT 
             m.M_ID,
@@ -108,10 +111,12 @@
         </collection>
     </resultMap>
 
+    <!-- 회원 ID로 회원 정보 가져오는 쿼리 -->
     <select id="getMemberById" parameterType="int" resultType="com.win.app.members.MemberDTO">
         SELECT * FROM MEMBERS WHERE M_ID = #{m_id, jdbcType=INTEGER}
     </select>
     
+    <!-- 회원 정보 업데이트 쿼리 -->
     <update id="updateMember" parameterType="com.win.app.members.MemberDTO">
         UPDATE MEMBERS
         SET MEMBER_NAME = #{member_name, jdbcType=VARCHAR},
@@ -122,10 +127,12 @@
         WHERE M_ID = #{m_id, jdbcType=INTEGER}
     </update>
     
+    <!-- 회원 삭제 쿼리 -->
     <delete id="deleteMember" parameterType="int">
         DELETE FROM MEMBERS WHERE M_ID = #{m_id, jdbcType=INTEGER}       
     </delete>
     
+    <!-- 회원 상세 정보 가져오는 쿼리 -->
     <select id="detail" parameterType="int" resultType="com.win.app.members.MemberDTO">
         SELECT 
             m.M_ID,
@@ -146,3 +153,4 @@
         WHERE m.M_ID = #{m_id, jdbcType=INTEGER}
     </select>
 </mapper>
+

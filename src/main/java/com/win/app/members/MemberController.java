@@ -88,6 +88,8 @@ public class MemberController {
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(MemberDTO memberDTO, MultipartFile profileImage, HttpSession session) throws Exception {
+		System.out.println("update: memberDTO=" + memberDTO);
+		System.out.println("update: profileImage=" + profileImage);
 		int result = memberService.updateMember(memberDTO, profileImage);
 		if (result > 0) {
 			session.setAttribute("member", memberDTO);

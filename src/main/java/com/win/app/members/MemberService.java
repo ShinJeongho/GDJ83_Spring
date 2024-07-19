@@ -58,9 +58,25 @@ public class MemberService {
 	}
 
 	public int updateMember(MemberDTO memberDTO, MultipartFile profileImage) throws Exception {
-		if (profileImage != null && !profileImage.isEmpty()) {
-			saveProfileImage(memberDTO.getM_id(), profileImage);
+		System.out.println("updateMember: memberDTO=" + memberDTO);
+		System.out.println("updateMember: profileImage=" + profileImage);
+
+		if (memberDTO == null) {
+			throw new NullPointerException("memberDTO is null");
 		}
+
+		if (profileImage != null && !profileImage.isEmpty()) {
+			MemberFileDTO memberFileDTO = new MemberFileDTO();
+			memberFileDTO.setM_id(memberDTO.getM_id());
+			memberFileDTO.setFileName(profileImage.getOriginalFilename());
+			memberFileDTO.setOriName(profileImage.getOriginalFilename());
+			memberDAO.insertMemberFile(memberFileDTO);
+		}
+
+		if (memberDAO == null) {
+			throw new NullPointerException("memberDAO is null");
+		}
+
 		return memberDAO.updateMember(memberDTO);
 	}
 
