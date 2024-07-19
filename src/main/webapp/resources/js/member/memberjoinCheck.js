@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const btn = document.getElementById("btn");
     const frm = document.getElementById("frm");
 
-    btn.addEventListener("click", function() {
-        let fields = ['userName', 'password', 'confirmPassword', 'name', 'memberNumber', 'phone', 'email'];
+    btn.addEventListener("click", function(event) {
+        event.preventDefault(); // 폼 제출 막기
+        let fields = ['member_id', 'member_pwd', 'confirmPassword', 'member_name', 'member_number', 'phone', 'email'];
         let isValid = true;
 
         fields.forEach(field => {
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
-        if (document.getElementById("password").value !== document.getElementById("confirmPassword").value) {
+        if (document.getElementById("member_pwd").value !== document.getElementById("confirmPassword").value) {
             document.getElementById("confirmPasswordError").textContent = "비밀번호가 일치하지 않습니다.";
             document.getElementById("confirmPassword").value = "";
             isValid = false;
@@ -39,4 +40,3 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
-	

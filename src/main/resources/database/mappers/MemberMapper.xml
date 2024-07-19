@@ -5,25 +5,69 @@
   
 <mapper namespace="com.win.app.members.MemberDAO">
 
+    <select id="getMemberWithFiles" parameterType="map" resultType="com.win.app.members.MemberDTO">
+        SELECT 
+            m.M_ID,
+            m.MEMBER_NAME,
+            m.MEMBER_NUMBER,
+            m.PHONE,
+            m.EMAIL,
+            m.MEMBER_ID,
+            m.MEMBER_PWD,
+            mf.FILENAME AS PROFILE_IMAGE,
+            mf.ORINAME AS ORIGINAL_NAME
+        FROM 
+            MEMBERS m
+        LEFT JOIN 
+            MEMBERFILES mf ON m.M_ID = mf.M_ID
+        WHERE
+            m.MEMBER_ID = #{member_id}
+    </select>
+    
+    
+    
+    
+    <insert id="insertMemberFile" parameterType="com.win.app.members.MemberFileDTO">
+        INSERT INTO MEMBERFILES (FILENUM, M_ID, FILENAME, ORINAME)
+        VALUES (FILES_SEQ.NEXTVAL, #{m_id, jdbcType=INTEGER}, #{fileName, jdbcType=VARCHAR}, #{oriName, jdbcType=VARCHAR})
+    </insert>
+
     <insert id="join" parameterType="com.win.app.members.MemberDTO">
-        INSERT INTO MEMBERS (M_ID, MEMBER_NAME, MEMBER_NUMBER, PHONE, EMAIL, MEMBER_ID, MEMBER_PWD)
-        VALUES (MEMBERS_SEQ.NEXTVAL, 
+        <selectKey keyProperty="m_id" resultType="int" order="BEFORE">
+            SELECT MEMBERS_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO MEMBERS (M_ID, MEMBER_NAME, MEMBER_NUMBER, PHONE, EMAIL, MEMBER_ID, MEMBER_PWD, PROFILE_IMAGE)
+        VALUES (#{m_id, jdbcType=INTEGER}, 
                 #{member_name, jdbcType=VARCHAR}, 
                 #{member_number, jdbcType=VARCHAR}, 
                 #{phone, jdbcType=VARCHAR}, 
                 #{email, jdbcType=VARCHAR}, 
                 #{member_id, jdbcType=VARCHAR}, 
-                #{member_pwd, jdbcType=VARCHAR})
+                #{member_pwd, jdbcType=VARCHAR},
+                #{profile_image, jdbcType=VARCHAR})
     </insert>
-    
-    <select id="login" parameterType="com.win.app.members.MemberDTO" resultType="com.win.app.members.MemberDTO">
-        SELECT 
+
+    <select id="isDuplicate" parameterType="com.win.app.members.MemberDTO" resultType="int">
+        SELECT COUNT(*) 
+        FROM MEMBERS 
+        WHERE MEMBER_ID = #{member_id, jdbcType=VARCHAR} 
+           OR EMAIL = #{email, jdbcType=VARCHAR} 
+           OR MEMBER_NUMBER = #{member_number, jdbcType=VARCHAR}
+    </select>
+  
+     <select id="login" parameterType="com.win.app.members.MemberDTO" resultType="com.win.app.members.MemberDTO">
+        SELECT
             m.M_ID,
             m.MEMBER_ID,
             m.MEMBER_PWD,
-            m.MEMBER_NAME
-        FROM MEMBERS m
-        WHERE m.MEMBER_ID = #{member_id, jdbcType=VARCHAR}
+            m.MEMBER_NAME,
+            mf.FILENAME AS PROFILE_IMAGE
+        FROM
+            MEMBERS m
+        LEFT JOIN
+            MEMBERFILES mf ON m.M_ID = mf.M_ID
+        WHERE
+            m.MEMBER_ID = #{member_id}
     </select>
     
     <select id="getMemberWithAccounts" parameterType="int" resultMap="memberWithAccountsResult">
@@ -35,6 +79,7 @@
             m.EMAIL,
             m.MEMBER_ID,
             m.MEMBER_PWD,
+            m.PROFILE_IMAGE,
             pi.PRODUCT_INFO_ID,
             pi.PRODUCT_ID,
             pi.JOIN_DATE,
@@ -53,6 +98,7 @@
         <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
         <result column="MEMBER_ID" property="member_id" jdbcType="VARCHAR"/>
         <result column="MEMBER_PWD" property="member_pwd" jdbcType="VARCHAR"/>
+        <result column="PROFILE_IMAGE" property="profile_image" jdbcType="VARCHAR"/>
         <collection property="dtos" ofType="com.win.app.accounts.AccountDTO">
             <id column="PRODUCT_INFO_ID" property="product_info_id" jdbcType="INTEGER"/>
             <result column="PRODUCT_ID" property="product_id" jdbcType="VARCHAR"/>
@@ -71,7 +117,8 @@
         SET MEMBER_NAME = #{member_name, jdbcType=VARCHAR},
             MEMBER_NUMBER = #{member_number, jdbcType=VARCHAR},
             PHONE = #{phone, jdbcType=VARCHAR},
-            EMAIL = #{email, jdbcType=VARCHAR}
+            EMAIL = #{email, jdbcType=VARCHAR},
+            PROFILE_IMAGE = #{profile_image, jdbcType=VARCHAR}
         WHERE M_ID = #{m_id, jdbcType=INTEGER}
     </update>
     
@@ -88,6 +135,7 @@
             m.EMAIL,
             m.MEMBER_ID,
             m.MEMBER_PWD,
+            m.PROFILE_IMAGE,
             pi.PRODUCT_INFO_ID,
             pi.PRODUCT_ID,
             pi.JOIN_DATE,

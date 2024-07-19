@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/members/*")
@@ -24,15 +24,8 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "join", method = RequestMethod.POST)
-	public String join(@ModelAttribute MemberDTO memberDTO) throws Exception {
-		System.out.println("MemberDTO: " + memberDTO); // 디버그 로그 추가
-		System.out.println("Member Name: " + memberDTO.getMember_name()); // 추가 로그
-		System.out.println("Member Number: " + memberDTO.getMember_number());
-		System.out.println("Phone: " + memberDTO.getPhone());
-		System.out.println("Email: " + memberDTO.getEmail());
-		System.out.println("Member ID: " + memberDTO.getMember_id());
-		System.out.println("Member PWD: " + memberDTO.getMember_pwd());
-		int result = memberService.join(memberDTO);
+	public String join(MemberDTO memberDTO, MultipartFile file, HttpSession session) throws Exception {
+		int result = memberService.join(memberDTO, file);
 		return "redirect:/";
 	}
 
@@ -45,10 +38,9 @@ public class MemberController {
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(MemberDTO memberDTO, String remember, HttpServletResponse response, HttpSession session)
 			throws Exception {
-
 		if (remember != null) {
 			Cookie cookie = new Cookie("remember", memberDTO.getMember_id());
-			cookie.setMaxAge(60 * 60);
+			cookie.setMaxAge(60 * 60 * 24 * 7); // 1주일 동안 유지
 			response.addCookie(cookie);
 		} else {
 			Cookie cookie = new Cookie("remember", "");
@@ -59,8 +51,9 @@ public class MemberController {
 		MemberDTO result = memberService.login(memberDTO);
 		if (result != null) {
 			session.setAttribute("member", result);
+			return "redirect:/"; // 로그인 성공 시 메인페이지로 리다이렉트
 		}
-		return "redirect:/";
+		return "redirect:/members/login?error=1"; // 로그인 실패 시 다시 로그인 페이지로 리다이렉트
 	}
 
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
@@ -73,7 +66,7 @@ public class MemberController {
 	public String mypage(HttpSession session, Model model) throws Exception {
 		MemberDTO sessionMember = (MemberDTO) session.getAttribute("member");
 		if (sessionMember != null) {
-			MemberDTO memberDTO = memberService.getMemberWithAccounts(sessionMember.getM_id());
+			MemberDTO memberDTO = memberService.getMemberWithFiles(sessionMember.getMember_id());
 			model.addAttribute("member", memberDTO);
 			return "members/mypage"; // mypage.jsp로 이동
 		} else {
@@ -94,8 +87,8 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(MemberDTO memberDTO, HttpSession session) throws Exception {
-		int result = memberService.updateMember(memberDTO);
+	public String update(MemberDTO memberDTO, MultipartFile profileImage, HttpSession session) throws Exception {
+		int result = memberService.updateMember(memberDTO, profileImage);
 		if (result > 0) {
 			session.setAttribute("member", memberDTO);
 		}

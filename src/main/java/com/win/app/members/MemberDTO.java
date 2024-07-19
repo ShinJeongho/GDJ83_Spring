@@ -12,6 +12,7 @@ public class MemberDTO {
 	private String email;
 	private String member_id;
 	private String member_pwd;
+	private String profile_image; // 프로필 이미지 필드 추가
 	private List<AccountDAO> dtos;
 
 	public List<AccountDAO> getDtos() {
@@ -76,5 +77,13 @@ public class MemberDTO {
 
 	public void setMember_pwd(String member_pwd) {
 		this.member_pwd = member_pwd;
+	}
+
+	public String getProfile_image() {
+		return profile_image;
+	}
+
+	public void setProfile_image(String profile_image) {
+		this.profile_image = profile_image;
 	}
 }

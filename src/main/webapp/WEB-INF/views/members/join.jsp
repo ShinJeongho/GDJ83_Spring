@@ -17,14 +17,14 @@
             <div class="col-md-6">
                 <form action="<c:url value='/members/join'/>" method="post" id="frm" enctype="multipart/form-data"> <!-- action 추가 -->
                     <div class="mb-3">
-                        <label for="userName" class="form-label">ID</label>
-                        <input type="text" class="form-control" id="userName" name="member_id">
-                        <div id="userNameError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
+                        <label for="member_id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="member_id" name="member_id">
+                        <div id="member_idError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">PASSWORD</label>
-                        <input type="password" class="form-control" id="password" name="member_pwd">
-                        <div id="passwordError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
+                        <label for="member_pwd" class="form-label">PASSWORD</label>
+                        <input type="password" class="form-control" id="member_pwd" name="member_pwd">
+                        <div id="member_pwdError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
                     </div>
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">PASSWORD 확인</label>
@@ -32,14 +32,14 @@
                         <div id="confirmPasswordError" class="text-danger"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="name" class="form-label">NAME</label>
-                        <input type="text" class="form-control" id="name" name="member_name">
-                        <div id="nameError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
+                        <label for="member_name" class="form-label">NAME</label>
+                        <input type="text" class="form-control" id="member_name" name="member_name">
+                        <div id="member_nameError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
                     </div>
                     <div class="mb-3">
-                        <label for="memberNumber" class="form-label">MEMBER NUMBER</label>
-                        <input type="text" class="form-control" id="memberNumber" name="member_number">
-                        <div id="memberNumberError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
+                        <label for="member_number" class="form-label">MEMBER NUMBER</label>
+                        <input type="text" class="form-control" id="member_number" name="member_number">
+                        <div id="member_numberError" class="text-danger"></div> <!-- 오류 메시지 표시 -->
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">PHONE</label>
@@ -56,7 +56,7 @@
                         <div id="photoFields"></div> <!-- 동적으로 추가될 파일 입력 필드를 위한 div -->
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="button" id="btn" class="btn btn-primary">Join</button> <!-- 제출 버튼 -->
+                        <button type="submit" id="btn" class="btn btn-primary">Join</button> <!-- 제출 버튼 -->
                     </div>
                 </form> <!-- 폼 끝 -->
             </div>
@@ -69,3 +69,4 @@
     </div>
 </body>
 </html>
+
