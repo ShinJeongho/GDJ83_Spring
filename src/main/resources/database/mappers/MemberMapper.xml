@@ -36,15 +36,14 @@
         <selectKey keyProperty="m_id" resultType="int" order="BEFORE">
             SELECT MEMBERS_SEQ.NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO MEMBERS (M_ID, MEMBER_NAME, MEMBER_NUMBER, PHONE, EMAIL, MEMBER_ID, MEMBER_PWD, PROFILE_IMAGE)
+        INSERT INTO MEMBERS (M_ID, MEMBER_NAME, MEMBER_NUMBER, PHONE, EMAIL, MEMBER_ID, MEMBER_PWD)
         VALUES (#{m_id, jdbcType=INTEGER}, 
                 #{member_name, jdbcType=VARCHAR}, 
                 #{member_number, jdbcType=VARCHAR}, 
                 #{phone, jdbcType=VARCHAR}, 
                 #{email, jdbcType=VARCHAR}, 
                 #{member_id, jdbcType=VARCHAR}, 
-                #{member_pwd, jdbcType=VARCHAR},
-                #{profile_image, jdbcType=VARCHAR})
+                #{member_pwd, jdbcType=VARCHAR})
     </insert>
 
     <!-- 중복 체크 쿼리 -->
@@ -82,13 +81,14 @@
             m.EMAIL,
             m.MEMBER_ID,
             m.MEMBER_PWD,
-            m.PROFILE_IMAGE,
+            mf.FILENAME AS PROFILE_IMAGE,
             pi.PRODUCT_INFO_ID,
             pi.PRODUCT_ID,
             pi.JOIN_DATE,
             pi.ACCOUNT_NUMBER,
             pi.BALANCE
         FROM MEMBERS m
+        LEFT JOIN MEMBERFILES mf ON m.M_ID = mf.M_ID
         LEFT JOIN PRODUCT_INFO pi ON m.M_ID = pi.M_ID
         WHERE m.M_ID = #{m_id, jdbcType=INTEGER}
     </select>
@@ -122,8 +122,7 @@
         SET MEMBER_NAME = #{member_name, jdbcType=VARCHAR},
             MEMBER_NUMBER = #{member_number, jdbcType=VARCHAR},
             PHONE = #{phone, jdbcType=VARCHAR},
-            EMAIL = #{email, jdbcType=VARCHAR},
-            PROFILE_IMAGE = #{profile_image, jdbcType=VARCHAR}
+            EMAIL = #{email, jdbcType=VARCHAR}
         WHERE M_ID = #{m_id, jdbcType=INTEGER}
     </update>
     
@@ -142,15 +141,15 @@
             m.EMAIL,
             m.MEMBER_ID,
             m.MEMBER_PWD,
-            m.PROFILE_IMAGE,
+            mf.FILENAME AS PROFILE_IMAGE,
             pi.PRODUCT_INFO_ID,
             pi.PRODUCT_ID,
             pi.JOIN_DATE,
             pi.ACCOUNT_NUMBER,
             pi.BALANCE
         FROM MEMBERS m
+        LEFT JOIN MEMBERFILES mf ON m.M_ID = mf.M_ID
         LEFT JOIN PRODUCT_INFO pi ON m.M_ID = pi.M_ID
         WHERE m.M_ID = #{m_id, jdbcType=INTEGER}
     </select>
 </mapper>
-
